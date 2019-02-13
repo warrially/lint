@@ -5,7 +5,7 @@
 // https://developers.google.com/open-source/licenses/bsd.
 
 // Package lint contains a linter for Go source code.
-package lint // import "golang.org/x/lint"
+package lint
 
 import (
 	"bufio"
@@ -817,7 +817,7 @@ func (f *file) lintTypeDoc(t *ast.TypeSpec, doc *ast.CommentGroup) {
 		return
 	}
 	if doc == nil {
-		f.errorf(t, 1, link(docCommentsLink), category("comments"), "exported type %v should have comment or be unexported", t.Name)
+		f.errorf(t, 1, link(docCommentsLink), category("comments"), "导出类型 [ %v ] 应该要添加一个注释 [ // %v  ]", t.Name, t.Name)
 		return
 	}
 
@@ -830,7 +830,7 @@ func (f *file) lintTypeDoc(t *ast.TypeSpec, doc *ast.CommentGroup) {
 		}
 	}
 	if !strings.HasPrefix(s, t.Name.Name+" ") {
-		f.errorf(doc, 1, link(docCommentsLink), category("comments"), `comment on exported type %v should be of the form "%v ..." (with optional leading article)`, t.Name, t.Name)
+		f.errorf(doc, 1, link(docCommentsLink), category("comments"), `注释的形式应该是类型名称 [ %v ] 加上注释内容, 举个栗子 "[ // %v 注释 ]" (放在你函数的正上方)`, t.Name, t.Name)
 	}
 }
 
@@ -1277,10 +1277,10 @@ func (f *file) lintReceiverNames() {
 			f.errorf(n, 1, link(ref), category("naming"), `receiver name should not be an underscore, omit the name if it is unused`)
 			return true
 		}
-		if name == "this" || name == "self" {
-			f.errorf(n, 1, link(ref), category("naming"), `receiver name should be a reflection of its identity; don't use generic names such as "this" or "self"`)
-			return true
-		}
+		// if name == "this" || name == "self" {
+		// 	f.errorf(n, 1, link(ref), category("naming"), `receiver name should be a reflection of its identity; don't use generic names such as "this" or "self"`)
+		// 	return true
+		// }
 		recv := receiverType(fn)
 		if prev, ok := typeReceiver[recv]; ok && prev != name {
 			f.errorf(n, 1, link(ref), category("naming"), "receiver name %s should be consistent with previous receiver name %s for %s", name, prev, recv)
