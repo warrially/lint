@@ -830,7 +830,7 @@ func (f *file) lintTypeDoc(t *ast.TypeSpec, doc *ast.CommentGroup) {
 		}
 	}
 	if !strings.HasPrefix(s, t.Name.Name+" ") {
-		f.errorf(doc, 1, link(docCommentsLink), category("comments"), `注释的形式应该是类型名称 [ %v ] 加上注释内容, 举个栗子 "[ // %v 注释 ]" (放在你函数的正上方)`, t.Name, t.Name)
+		f.errorf(doc, 1, link(docCommentsLink), category("comments"), `注释的形式应该是类型名称 [ %v ] 加上注释内容, 举个栗子 "// %v 注释 ..." (放在你函数的正上方)`, t.Name, t.Name)
 	}
 }
 
@@ -872,13 +872,13 @@ func (f *file) lintFuncDoc(fn *ast.FuncDecl) {
 		name = recv + "." + name
 	}
 	if fn.Doc == nil {
-		f.errorf(fn, 1, link(docCommentsLink), category("comments"), "exported %s %s should have comment or be unexported", kind, name)
+		f.errorf(fn, 1, link(docCommentsLink), category("comments"), "导出%s [ %s ] 应该要添加一个注释", kind, name)
 		return
 	}
 	s := fn.Doc.Text()
 	prefix := fn.Name.Name + " "
 	if !strings.HasPrefix(s, prefix) {
-		f.errorf(fn.Doc, 1, link(docCommentsLink), category("comments"), `comment on exported %s %s should be of the form "%s..."`, kind, name, prefix)
+		f.errorf(fn.Doc, 1, link(docCommentsLink), category("comments"), `导出%s注释 [%s] 的形式不正确, 举个栗子 "// %s..."`, kind, name, prefix)
 	}
 }
 
