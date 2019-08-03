@@ -1,0 +1,13 @@
+Windows Registry Editor Version 5.00
+[HKEY_CLASSES_ROOT\*\shell\SublimeText3]
+@="用 golint 检查"
+"Icon"="D:\\go\\bin\\golint.exe,0"
+[HKEY_CLASSES_ROOT\*\shell\SublimeText3\command]
+@="D:\\go\\bin\\golint.exe %1"
+
+
+[HKEY_CLASSES_ROOT\Directory\shell\SublimeText3]
+@="用 golint 检查目录"
+"Icon"="D:\\go\\bin\\golint.exe,0"
+[HKEY_CLASSES_ROOT\Directory\shell\SublimeText3\command]
+@="D:\\go\\bin\\golint.exe %1"
