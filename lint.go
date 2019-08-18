@@ -455,7 +455,7 @@ func (f *file) lintBlankImports() {
 		// This is the first blank import of a group.
 		if imp.Doc == nil && imp.Comment == nil {
 			ref := ""
-			f.errorf(imp, 1, link(ref), category("imports"), "a blank import should be only in a main or test package, or have a comment justifying it")
+			f.errorf(imp, 1, link(ref), category("imports"), "空白导入应该只在主包或测试包中，或者有一个注释证明它是正确的。")
 		}
 	}
 }
