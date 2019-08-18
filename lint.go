@@ -408,7 +408,7 @@ func (f *file) lintPackageComment() {
 				Line:   endPos.Line + 1,
 				Column: 1,
 			}
-			f.pkg.errorfAt(pos, 0.9, link(ref), category("comments"), "package comment is detached; there should be no blank lines between it and the package statement")
+			f.pkg.errorfAt(pos, 0.9, link(ref), category("comments"), "package comment is detached; there 应该用 no blank lines between it and the package statement")
 			return
 		}
 	}
@@ -424,7 +424,7 @@ func (f *file) lintPackageComment() {
 	}
 	// Only non-main packages need to keep to this form.
 	if !f.pkg.main && !strings.HasPrefix(s, prefix) {
-		f.errorf(f.f.Doc, 1, link(ref), category("comments"), `package comment should be of the form "%s..."`, prefix)
+		f.errorf(f.f.Doc, 1, link(ref), category("comments"), `package comment 应该用 of the form "%s..."`, prefix)
 	}
 }
 
@@ -557,10 +557,10 @@ func isInTopLevel(f *ast.File, ident *ast.Ident) bool {
 func (f *file) lintNames() {
 	// Package names need slightly different handling than other names.
 	if strings.Contains(f.f.Name.Name, "_") && !strings.HasSuffix(f.f.Name.Name, "_test") {
-		f.errorf(f.f, 1, link("http://golang.org/doc/effective_go.html#package-names"), category("naming"), "don't use an underscore in package name")
+		f.errorf(f.f, 1, link("http://golang.org/doc/effective_go.html#package-names"), category("naming"), "不要在包名里使用下划线")
 	}
 	if anyCapsRE.MatchString(f.f.Name.Name) {
-		f.errorf(f.f, 1, link("http://golang.org/doc/effective_go.html#package-names"), category("mixed-caps"), "don't use MixedCaps in package name; %s should be %s", f.f.Name.Name, strings.ToLower(f.f.Name.Name))
+		f.errorf(f.f, 1, link("http://golang.org/doc/effective_go.html#package-names"), category("mixed-caps"), " 包名不要用大小写混合 %s 应该用 %s", f.f.Name.Name, strings.ToLower(f.f.Name.Name))
 	}
 
 	check := func(id *ast.Ident, thing string) {
@@ -580,14 +580,14 @@ func (f *file) lintNames() {
 				}
 			}
 			if capCount >= 2 {
-				f.errorf(id, 0.8, link(styleGuideBase+"#mixed-caps"), category("naming"), "don't use ALL_CAPS in Go names; use CamelCase")
+				f.errorf(id, 0.8, link(styleGuideBase+"#mixed-caps"), category("naming"), "不要用全大写命名; 请使用驼峰命名法")
 				return
 			}
 		}
 		if thing == "const" || (thing == "var" && isInTopLevel(f.f, id)) {
 			if len(id.Name) > 2 && id.Name[0] == 'k' && id.Name[1] >= 'A' && id.Name[1] <= 'Z' {
 				should := string(id.Name[1]+'a'-'A') + id.Name[2:]
-				f.errorf(id, 0.8, link(styleGuideBase+"#mixed-caps"), category("naming"), "don't use leading k in Go names; %s %s should be %s", thing, id.Name, should)
+				f.errorf(id, 0.8, link(styleGuideBase+"#mixed-caps"), category("naming"), "don't use leading k in Go names; %s %s 应该用 %s", thing, id.Name, should)
 			}
 		}
 
@@ -597,10 +597,10 @@ func (f *file) lintNames() {
 		}
 
 		if len(id.Name) > 2 && strings.Contains(id.Name[1:], "_") {
-			f.errorf(id, 0.9, link("http://golang.org/doc/effective_go.html#mixed-caps"), category("naming"), "don't use underscores in Go names; %s %s should be %s", thing, id.Name, should)
+			f.errorf(id, 0.9, link("http://golang.org/doc/effective_go.html#mixed-caps"), category("naming"), "don't use underscores in Go names; %s %s 应该用 %s", thing, id.Name, should)
 			return
 		}
-		f.errorf(id, 0.8, link(styleGuideBase+"#initialisms"), category("naming"), "%s %s should be %s", thing, id.Name, should)
+		f.errorf(id, 0.8, link(styleGuideBase+"#initialisms"), category("naming"), "%s %s 应该用 %s", thing, id.Name, should)
 	}
 	checkList := func(fl *ast.FieldList, thing string) {
 		if fl == nil {
@@ -697,7 +697,7 @@ func (f *file) lintNames() {
 	})
 }
 
-// lintName returns a different name if it should be different.
+// lintName returns a different name if it 应该用 different.
 func lintName(name string) (should string) {
 	// Fast path for simple cases: "_" and all lowercase.
 	if name == "_" {
@@ -931,7 +931,7 @@ func (f *file) lintValueSpecDoc(vs *ast.ValueSpec, gd *ast.GenDecl, genDeclMissi
 	}
 	prefix := name + " "
 	if !strings.HasPrefix(doc.Text(), prefix) {
-		f.errorf(doc, 1, link(docCommentsLink), category("comments"), `comment on exported %s %s should be of the form "%s..."`, kind, name, prefix)
+		f.errorf(doc, 1, link(docCommentsLink), category("comments"), `comment on exported %s %s 应该用 of the form "%s..."`, kind, name, prefix)
 	}
 }
 
@@ -1278,12 +1278,12 @@ func (f *file) lintReceiverNames() {
 			return true
 		}
 		// if name == "this" || name == "self" {
-		// 	f.errorf(n, 1, link(ref), category("naming"), `receiver name should be a reflection of its identity; don't use generic names such as "this" or "self"`)
+		// 	f.errorf(n, 1, link(ref), category("naming"), `receiver name 应该用 a reflection of its identity; don't use generic names such as "this" or "self"`)
 		// 	return true
 		// }
 		recv := receiverType(fn)
 		if prev, ok := typeReceiver[recv]; ok && prev != name {
-			f.errorf(n, 1, link(ref), category("naming"), "receiver name %s should be consistent with previous receiver name %s for %s", name, prev, recv)
+			f.errorf(n, 1, link(ref), category("naming"), "receiver name %s 应该用 consistent with previous receiver name %s for %s", name, prev, recv)
 			return true
 		}
 		typeReceiver[recv] = name
@@ -1334,11 +1334,11 @@ func (f *file) lintErrorReturn() {
 		if isIdent(ret[len(ret)-1].Type, "error") {
 			return true
 		}
-		// An error return parameter should be the last parameter.
+		// An error return parameter 应该用 the last parameter.
 		// Flag any error parameters found before the last.
 		for _, r := range ret[:len(ret)-1] {
 			if isIdent(r.Type, "error") {
-				f.errorf(fn, 0.9, category("arg-order"), "error should be the last type when returning multiple items")
+				f.errorf(fn, 0.9, category("arg-order"), "error 应该用 the last type when returning multiple items")
 				break // only flag one
 			}
 		}
@@ -1494,11 +1494,11 @@ func (f *file) lintContextArgs() {
 		if !ok || len(fn.Type.Params.List) <= 1 {
 			return true
 		}
-		// A context.Context should be the first parameter of a function.
+		// A context.Context 应该用 the first parameter of a function.
 		// Flag any that show up after the first.
 		for _, arg := range fn.Type.Params.List[1:] {
 			if isPkgDot(arg.Type, "context", "Context") {
-				f.errorf(fn, 0.9, link("https://golang.org/pkg/context/"), category("arg-order"), "context.Context should be the first parameter of a function")
+				f.errorf(fn, 0.9, link("https://golang.org/pkg/context/"), category("arg-order"), "context.Context 应该用 the first parameter of a function")
 				break // only flag one
 			}
 		}
